@@ -1,7 +1,6 @@
 package com.advancedworldgen.commands;
 
 import com.advancedworldgen.AdvancedWorldGenerator;
-import com.advancedworldgen.generator.*;
 import com.advancedworldgen.util.TitleUtil;
 import org.bukkit.*;
 import org.bukkit.command.*;
@@ -16,11 +15,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
     private static final Map<String, String> WORLD_GENERATORS = new LinkedHashMap<>();
     static {
-        WORLD_GENERATORS.put("DuneWorld",     "dune");
-        WORLD_GENERATORS.put("InfernoWorld",  "inferno");
-        WORLD_GENERATORS.put("FrozenRealm",   "frozen");
-        WORLD_GENERATORS.put("SkyRealm",      "sky");
-        WORLD_GENERATORS.put("ForestLegend",  "forest");
+        WORLD_GENERATORS.put("DuneWorld",    "dune");
+        WORLD_GENERATORS.put("InfernoWorld", "inferno");
+        WORLD_GENERATORS.put("FrozenRealm",  "frozen");
+        WORLD_GENERATORS.put("SkyRealm",     "sky");
+        WORLD_GENERATORS.put("ForestLegend", "forest");
     }
 
     private static final Map<String, String> WORLD_DESCRIPTIONS = new LinkedHashMap<>();
@@ -59,14 +58,14 @@ public class CommandManager implements CommandExecutor, TabCompleter {
             return true;
         }
         switch (cmd.getName().toLowerCase()) {
-            case "awg"        -> handleHelp(sender);
-            case "awgcreate"  -> handleCreate(sender, args);
-            case "awgdelete"  -> handleDelete(sender, args);
-            case "awgtp"      -> handleTeleport(sender, args);
-            case "awgconfig"  -> handleConfig(sender, args);
-            case "awginfo"    -> handleInfo(sender);
-            case "awglist"    -> handleList(sender);
-            case "awgworlds"  -> handleWorlds(sender);
+            case "awg"       -> handleHelp(sender);
+            case "awgcreate" -> handleCreate(sender, args);
+            case "awgdelete" -> handleDelete(sender, args);
+            case "awgtp"     -> handleTeleport(sender, args);
+            case "awgconfig" -> handleConfig(sender, args);
+            case "awginfo"   -> handleInfo(sender);
+            case "awglist"   -> handleList(sender);
+            case "awgworlds" -> handleWorlds(sender);
         }
         return true;
     }
@@ -114,9 +113,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
             return;
         }
 
-        // Detectar si es un mundo epico predefinido
         String genId = WORLD_GENERATORS.getOrDefault(name, "default");
-        String desc = WORLD_DESCRIPTIONS.getOrDefault(name, "§7Mundo custom");
+        String desc  = WORLD_DESCRIPTIONS.getOrDefault(name, "§7Mundo custom");
 
         sender.sendMessage("");
         sender.sendMessage("§6§l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
@@ -184,8 +182,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         }
         String name = args[0];
 
-        // No borrar el mundo principal
-        if (Bukkit.getWorlds().size() > 0 && Bukkit.getWorlds().get(0).getName().equals(name)) {
+        if (!Bukkit.getWorlds().isEmpty() && Bukkit.getWorlds().get(0).getName().equals(name)) {
             sender.sendMessage(prefix() + "§cNo puedes borrar el mundo principal.");
             return;
         }
@@ -234,7 +231,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
         String target = args[0];
 
-        // Teletransporte a mundo epico
         if (WORLD_GENERATORS.containsKey(target)) {
             World w = Bukkit.getWorld(target);
             if (w == null) {
@@ -249,7 +245,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
             return;
         }
 
-        // Buscar estructura
         player.sendMessage(prefix() + "§7Buscando §e" + target + "§7 cerca de ti...");
         TitleUtil.send(player, "§6Buscando...", "§e" + target, 10, 40, 10);
 
@@ -280,21 +275,20 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         int ox = origin.getBlockX();
         int oz = origin.getBlockZ();
 
-        Material marker = switch (type) {
-            case "aldea", "granja" -> Material.HAY_BLOCK;
-            case "ciudad"          -> Material.CHISELED_STONE_BRICKS;
-            case "dungeon"         -> Material.MOSSY_STONE_BRICKS;
-            case "volcan"          -> Material.MAGMA_BLOCK;
-            case "ruinas"          -> Material.CHISELED_DEEPSLATE;
-            case "barco"           -> Material.BARREL;
-            case "tesoro"          -> Material.CHEST;
-            case "templo"          -> Material.MOSSY_STONE_BRICKS;
-            case "castillo"        -> Material.STONE_BRICK_WALL;
-            case "puente"          -> Material.STONE_BRICKS;
-            case "aldeaarbol"      -> Material.JUNGLE_LOG;
-            case "puerto"          -> Material.SEA_LANTERN;
-            default                -> Material.STONE_BRICKS;
-        };
+        Material marker;
+        if (type.equals("aldea") || type.equals("granja")) marker = Material.HAY_BLOCK;
+        else if (type.equals("ciudad"))     marker = Material.CHISELED_STONE_BRICKS;
+        else if (type.equals("dungeon"))    marker = Material.MOSSY_STONE_BRICKS;
+        else if (type.equals("volcan"))     marker = Material.MAGMA_BLOCK;
+        else if (type.equals("ruinas"))     marker = Material.CHISELED_DEEPSLATE;
+        else if (type.equals("barco"))      marker = Material.BARREL;
+        else if (type.equals("tesoro"))     marker = Material.CHEST;
+        else if (type.equals("templo"))     marker = Material.MOSSY_STONE_BRICKS;
+        else if (type.equals("castillo"))   marker = Material.STONE_BRICK_WALL;
+        else if (type.equals("puente"))     marker = Material.STONE_BRICKS;
+        else if (type.equals("aldeaarbol")) marker = Material.JUNGLE_LOG;
+        else if (type.equals("puerto"))     marker = Material.SEA_LANTERN;
+        else                                marker = Material.STONE_BRICKS;
 
         for (int r = step; r <= searchRadius; r += step) {
             for (int angle = 0; angle < 360; angle += 15) {
@@ -319,13 +313,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         if (args.length < 2) {
             sender.sendMessage("");
             sender.sendMessage("§6§l▬▬▬▬ Configuracion AWG ▬▬▬▬");
-            sender.sendMessage("§e mountain-height  §7(50-320)    §f- Altura montanas");
-            sender.sendMessage("§e tree-frequency   §7(1-10)      §f- Frecuencia arboles");
-            sender.sendMessage("§e cave-density     §7(0.01-0.2)  §f- Densidad cuevas");
-            sender.sendMessage("§e volcano-chance   §7(1-20)      §f- % Volcanes");
-            sender.sendMessage("§e dungeon-chance   §7(1-30)      §f- % Mazmorras");
-            sender.sendMessage("§e village-chance   §7(1-40)      §f- % Aldeas");
-            sender.sendMessage("§e city-chance      §7(1-10)      §f- % Ciudades");
+            sender.sendMessage("§e mountain-height  §7(50-320)   §f- Altura montanas");
+            sender.sendMessage("§e tree-frequency   §7(1-10)     §f- Frecuencia arboles");
+            sender.sendMessage("§e cave-density     §7(0.01-0.2) §f- Densidad cuevas");
+            sender.sendMessage("§e volcano-chance   §7(1-20)     §f- % Volcanes");
+            sender.sendMessage("§e dungeon-chance   §7(1-30)     §f- % Mazmorras");
+            sender.sendMessage("§e village-chance   §7(1-40)     §f- % Aldeas");
+            sender.sendMessage("§e city-chance      §7(1-10)     §f- % Ciudades");
             sender.sendMessage("§6§l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
             sender.sendMessage("");
             return;
@@ -361,13 +355,15 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         if (world == null) return;
 
         long time = world.getTime();
-        String timeStr = time < 6000 ? "☀ Manana" : time < 12000 ? "☀ Tarde" :
-                         time < 18000 ? "🌙 Noche" : "🌙 Madrugada";
+        String timeStr;
+        if (time < 6000)       timeStr = "☀ Manana";
+        else if (time < 12000) timeStr = "☀ Tarde";
+        else if (time < 18000) timeStr = "🌙 Noche";
+        else                   timeStr = "🌙 Madrugada";
+
         String weather = world.hasStorm() ? "§9⛈ Tormenta" : "§a☀ Despejado";
         boolean isEpic = world.getGenerator() != null;
-        String genType = WORLD_GENERATORS.entrySet().stream()
-            .filter(e -> e.getKey().equals(world.getName()))
-            .map(Map.Entry::getValue).findFirst().orElse("custom");
+        String genType = WORLD_GENERATORS.getOrDefault(world.getName(), "custom");
 
         sender.sendMessage("");
         sender.sendMessage("§6§l▬▬▬▬▬ Info: §e" + world.getName() + " §6§l▬▬▬▬▬");
@@ -385,10 +381,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         sender.sendMessage("");
         sender.sendMessage("§6Configuracion actual:");
         sender.sendMessage("§7 Altura montanas: §e" + plugin.getConfig().get("generator.mountain-height", 120));
-        sender.sendMessage("§7 Volcanes: §e" + plugin.getConfig().get("generator.volcano-chance", 5) + "%");
+        sender.sendMessage("§7 Volcanes:  §e" + plugin.getConfig().get("generator.volcano-chance", 5) + "%");
         sender.sendMessage("§7 Mazmorras: §e" + plugin.getConfig().get("generator.dungeon-chance", 10) + "%");
-        sender.sendMessage("§7 Aldeas: §e" + plugin.getConfig().get("generator.village-chance", 16) + "%");
-        sender.sendMessage("§7 Ciudades: §e" + plugin.getConfig().get("generator.city-chance", 2) + "%");
+        sender.sendMessage("§7 Aldeas:    §e" + plugin.getConfig().get("generator.village-chance", 16) + "%");
+        sender.sendMessage("§7 Ciudades:  §e" + plugin.getConfig().get("generator.city-chance", 2) + "%");
         sender.sendMessage("§6§l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
         sender.sendMessage("");
     }
@@ -428,10 +424,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
             String name = entry.getKey();
             String desc = entry.getValue();
             World w = Bukkit.getWorld(name);
-            String status = w != null ? "§a[Activo §e" + w.getPlayers().size() + " jugadores§a]" : "§c[No creado]";
-            String createTip = w == null ? " §7- /awgcreate " + name : "";
+            String status = w != null
+                ? "§a[Activo §e" + w.getPlayers().size() + " jugadores§a]"
+                : "§c[No creado]";
+            String tip = w == null ? " §7- /awgcreate " + name : "";
             sender.sendMessage(desc);
-            sender.sendMessage("  §7Nombre: §e" + name + " " + status + createTip);
+            sender.sendMessage("  §7Nombre: §e" + name + " " + status + tip);
             sender.sendMessage("");
         }
 
@@ -440,54 +438,62 @@ public class CommandManager implements CommandExecutor, TabCompleter {
     }
 
     // ─────────────────────────────────────────
-    // Tab Completer
+    // Tab Completer — CORREGIDO
     // ─────────────────────────────────────────
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.isOp()) return List.of();
 
-        return switch (cmd.getName().toLowerCase()) {
-            case "awgcreate" -> args.length == 1 ?
-                new ArrayList<>(WORLD_GENERATORS.keySet()).stream()
-                    .filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase())).toList()
-                : List.of();
+        String cmdName = cmd.getName().toLowerCase();
 
-            case "awgdelete" -> args.length == 1 ?
-                Bukkit.getWorlds().stream().map(World::getName)
-                    .filter(s -> s.startsWith(args[0])).toList()
-                : List.of();
+        if (cmdName.equals("awgcreate") && args.length == 1) {
+            return new ArrayList<>(WORLD_GENERATORS.keySet()).stream()
+                .filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase()))
+                .toList();
+        }
 
-            case "awgtp" -> args.length == 1 ? {
-                List<String> options = new ArrayList<>(List.of(
-                    "aldea", "ciudad", "dungeon", "volcan", "ruinas",
-                    "barco", "tesoro", "granja", "templo", "castillo",
-                    "puente", "aldeaarbol", "puerto"
-                ));
-                options.addAll(WORLD_GENERATORS.keySet());
-                yield options.stream()
-                    .filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase())).toList();
-            } : List.of();
+        if (cmdName.equals("awgdelete") && args.length == 1) {
+            return Bukkit.getWorlds().stream()
+                .map(World::getName)
+                .filter(s -> s.startsWith(args[0]))
+                .toList();
+        }
 
-            case "awgconfig" -> {
-                if (args.length == 1) yield List.of(
+        if (cmdName.equals("awgtp") && args.length == 1) {
+            List<String> options = new ArrayList<>(List.of(
+                "aldea", "ciudad", "dungeon", "volcan", "ruinas",
+                "barco", "tesoro", "granja", "templo", "castillo",
+                "puente", "aldeaarbol", "puerto"
+            ));
+            options.addAll(WORLD_GENERATORS.keySet());
+            return options.stream()
+                .filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase()))
+                .toList();
+        }
+
+        if (cmdName.equals("awgconfig")) {
+            if (args.length == 1) {
+                return List.of(
                     "mountain-height", "tree-frequency", "cave-density",
                     "volcano-chance", "dungeon-chance", "village-chance",
                     "city-chance", "structure-frequency"
-                ).stream().filter(s -> s.startsWith(args[0].toLowerCase())).toList();
-                if (args.length == 2) yield switch (args[0].toLowerCase()) {
-                    case "mountain-height"     -> List.of("80", "120", "150", "200", "250");
-                    case "tree-frequency"      -> List.of("1", "2", "4", "6", "8", "10");
-                    case "cave-density"        -> List.of("0.04", "0.06", "0.08", "0.12");
-                    case "volcano-chance"      -> List.of("2", "5", "8", "12", "15");
-                    case "dungeon-chance"      -> List.of("5", "10", "15", "20");
-                    case "village-chance"      -> List.of("8", "12", "16", "20");
-                    case "city-chance"         -> List.of("1", "2", "4", "6");
-                    default                    -> List.of();
-                };
-                yield List.of();
+                ).stream()
+                    .filter(s -> s.startsWith(args[0].toLowerCase()))
+                    .toList();
             }
-            default -> List.of();
-        };
+            if (args.length == 2) {
+                String opt = args[0].toLowerCase();
+                if (opt.equals("mountain-height"))  return List.of("80", "120", "150", "200", "250");
+                if (opt.equals("tree-frequency"))   return List.of("1", "2", "4", "6", "8", "10");
+                if (opt.equals("cave-density"))     return List.of("0.04", "0.06", "0.08", "0.12");
+                if (opt.equals("volcano-chance"))   return List.of("2", "5", "8", "12", "15");
+                if (opt.equals("dungeon-chance"))   return List.of("5", "10", "15", "20");
+                if (opt.equals("village-chance"))   return List.of("8", "12", "16", "20");
+                if (opt.equals("city-chance"))      return List.of("1", "2", "4", "6");
+            }
+        }
+
+        return List.of();
     }
 
     // ─────────────────────────────────────────
@@ -495,14 +501,18 @@ public class CommandManager implements CommandExecutor, TabCompleter {
     // ─────────────────────────────────────────
     private void deleteFolder(File folder) {
         File[] files = folder.listFiles();
-        if (files != null) for (File f : files) {
-            if (f.isDirectory()) deleteFolder(f);
-            else f.delete();
+        if (files != null) {
+            for (File f : files) {
+                if (f.isDirectory()) deleteFolder(f);
+                else f.delete();
+            }
         }
         folder.delete();
     }
 
-    private String prefix() { return "§6[AWG] §r"; }
+    private String prefix() {
+        return "§6[AWG] §r";
+    }
 
     private String capitalize(String s) {
         if (s == null || s.isEmpty()) return s;
