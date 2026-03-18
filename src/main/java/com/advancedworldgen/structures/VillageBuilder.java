@@ -16,7 +16,6 @@ public class VillageBuilder {
         int y = getSurface(world, baseX + 8, baseZ + 8);
         if (y < 63 || y > 180) return;
 
-        // Camino central
         for (int i = -8; i <= 8; i++) {
             setBlock(world, baseX + 8, y, baseZ + 8 + i, Material.COBBLESTONE);
             setBlock(world, baseX + 8 + i, y, baseZ + 8, Material.COBBLESTONE);
@@ -69,10 +68,10 @@ public class VillageBuilder {
         setBlock(w, x + 1, y + 2, z + depth - 1, Material.GLASS_PANE);
         setBlock(w, x + width - 2, y + 2, z + depth - 1, Material.GLASS_PANE);
 
-        // Interior
+        // Interior — BED reemplazado por RED_BED
         setBlock(w, x + 1, y + 1, z + 1, Material.CRAFTING_TABLE);
         setBlock(w, x + width - 2, y + 1, z + 1, Material.FURNACE);
-        setBlock(w, x + 1, y + 1, z + depth - 2, Material.BED);
+        setBlock(w, x + 1, y + 1, z + depth - 2, Material.RED_BED);
         setBlock(w, x + width / 2, y + 2, z + depth / 2, Material.LANTERN);
 
         if (rand.nextInt(3) == 0) {
@@ -124,10 +123,8 @@ public class VillageBuilder {
         Material[] lootTable = {Material.DIAMOND, Material.EMERALD, Material.GOLD_INGOT,
             Material.IRON_INGOT, Material.IRON_SWORD, Material.BOW,
             Material.COOKED_BEEF, Material.BREAD, Material.ENCHANTED_GOLDEN_APPLE};
-        for (int i = 0; i < 3 + rand.nextInt(5); i++) {
-            Material mat = lootTable[rand.nextInt(lootTable.length)];
-            inv.setItem(rand.nextInt(27), new ItemStack(mat, 1 + rand.nextInt(8)));
-        }
+        for (int i = 0; i < 3 + rand.nextInt(5); i++)
+            inv.setItem(rand.nextInt(27), new ItemStack(lootTable[rand.nextInt(lootTable.length)], 1 + rand.nextInt(8)));
     }
 
     private void setBlock(World w, int x, int y, int z, Material m) {
