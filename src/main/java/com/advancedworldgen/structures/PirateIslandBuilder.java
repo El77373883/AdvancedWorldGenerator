@@ -1,5 +1,6 @@
 package com.advancedworldgen.structures;
 
+import com.advancedworldgen.generator.DuneTreePopulator;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.inventory.Inventory;
@@ -14,8 +15,6 @@ public class PirateIslandBuilder {
         int x = chunk.getX() * 16 + 2;
         int z = chunk.getZ() * 16 + 2;
         int y = world.getHighestBlockYAt(x + 7, z + 7);
-
-        // Solo en zonas bajas cerca del agua
         if (y < 60 || y > 80) return;
 
         buildIslandBase(world, x, y, z, rand);
@@ -26,7 +25,6 @@ public class PirateIslandBuilder {
     }
 
     private void buildIslandBase(World w, int x, int y, int z, Random rand) {
-        // Isla circular de arena
         int radius = 12;
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dz = -radius; dz <= radius; dz++) {
@@ -38,20 +36,11 @@ public class PirateIslandBuilder {
                 }
             }
         }
-        // Palmeras en la isla
-        for (int i = 0; i < 4; i++) {
-            int px = x + 4 + rand.nextInt(16);
-            int pz = z + 4 + rand.nextInt(16);
-            int py = w.getHighestBlockYAt(px, pz);
-            if (py >= y && py <= y + 3)
-                DuneTreePopulator.buildEpicPalm(null, px, py + 1, pz, 12 + rand.nextInt(8), rand);
-        }
     }
 
     private void buildPirateBase(World w, int x, int y, int z, Random rand) {
         int bx = x + 4, bz = z + 4;
 
-        // Cabaña pirata
         for (int dx = 0; dx < 8; dx++)
             for (int dz = 0; dz < 8; dz++)
                 setBlock(w, bx + dx, y, bz + dz, Material.OAK_PLANKS);
@@ -67,7 +56,6 @@ public class PirateIslandBuilder {
             }
         }
 
-        // Techo
         for (int dx = 0; dx < 8; dx++)
             for (int dz = 0; dz < 8; dz++)
                 setBlock(w, bx + dx, y + 5, bz + dz, Material.DARK_OAK_SLAB);
@@ -94,17 +82,13 @@ public class PirateIslandBuilder {
         setBlock(w, bx + 3, y + 1, bz + 6, Material.CHEST);
         Block b = w.getBlockAt(bx + 3, y + 1, bz + 6);
         if (b.getState() instanceof Chest chest) fillPirateLoot(chest.getInventory(), rand);
-
         setBlock(w, bx + 4, y + 1, bz + 6, Material.CHEST);
         Block b2 = w.getBlockAt(bx + 4, y + 1, bz + 6);
         if (b2.getState() instanceof Chest chest) fillPirateLoot(chest.getInventory(), rand);
-
-        // Antorcha
         setBlock(w, bx + 3, y + 3, bz + 3, Material.LANTERN);
     }
 
     private void buildCannons(World w, int x, int y, int z, Random rand) {
-        // Cañones en las esquinas
         int[][] cannonPos = {{x + 2, z + 2}, {x + 18, z + 2}, {x + 2, z + 18}, {x + 18, z + 18}};
         for (int[] pos : cannonPos) {
             setBlock(w, pos[0], y + 1, pos[1], Material.DISPENSER);
@@ -125,7 +109,6 @@ public class PirateIslandBuilder {
                 }
             }
         }
-        // Techo con bandera
         for (int dx = -1; dx <= 4; dx++)
             for (int dz = -1; dz <= 4; dz++)
                 setBlock(w, x + dx, y + height + 1, z + dz, Material.DARK_OAK_SLAB);
@@ -136,14 +119,12 @@ public class PirateIslandBuilder {
         setBlock(w, x + 2, y + height + 4, z + 1, Material.BLACK_WOOL);
         setBlock(w, x + 1, y + height + 5, z + 1, Material.BLACK_WOOL);
 
-        // Cofre en la cima
         setBlock(w, x + 2, y + height, z + 2, Material.CHEST);
         Block b = w.getBlockAt(x + 2, y + height, z + 2);
         if (b.getState() instanceof Chest chest) fillPirateLoot(chest.getInventory(), rand);
     }
 
     private void buildPirateCemetery(World w, int x, int y, int z, Random rand) {
-        // Lápidas piratas
         for (int i = 0; i < 5; i++) {
             int gx = x + (i % 3) * 3;
             int gz = z + (i / 3) * 3;
@@ -152,7 +133,6 @@ public class PirateIslandBuilder {
             if (rand.nextInt(3) == 0)
                 setBlock(w, gx + 1, y + 1, gz, Material.BONE_BLOCK);
         }
-        // Cofre enterrado con tesoro
         setBlock(w, x + 4, y - 1, z + 4, Material.CHEST);
         Block b = w.getBlockAt(x + 4, y - 1, z + 4);
         if (b.getState() instanceof Chest chest) fillPirateLoot(chest.getInventory(), rand);
