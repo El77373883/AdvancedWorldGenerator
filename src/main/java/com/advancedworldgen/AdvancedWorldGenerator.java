@@ -32,7 +32,7 @@ public class AdvancedWorldGenerator extends JavaPlugin implements Listener {
 
         commandManager = new CommandManager(this);
 
-        getLogger().info("Plugin habilitado. Usa /awgcreate <nombre> para crear un mundo epico.");
+        getLogger().info("Plugin habilitado. Usa /awgcreate <nombre> <tipo> para crear un mundo epico.");
     }
 
     @Override
@@ -40,7 +40,6 @@ public class AdvancedWorldGenerator extends JavaPlugin implements Listener {
         getLogger().info("AdvancedWorldGenerator deshabilitado.");
     }
 
-    // Mensaje de creditos al entrar al servidor
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -70,12 +69,12 @@ public class AdvancedWorldGenerator extends JavaPlugin implements Listener {
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
         if (id == null) id = "";
         return switch (id.toLowerCase()) {
-            case "dune" -> new DuneWorldGenerator();
+            case "dune"    -> new DuneWorldGenerator();
             case "inferno" -> new InfernoWorldGenerator();
-            case "frozen" -> new FrozenRealmGenerator();
-            case "sky" -> new SkyRealmGenerator();
-            case "forest" -> new ForestLegendGenerator();
-            default -> new AdvancedChunkGenerator();
+            case "frozen"  -> new FrozenRealmGenerator();
+            case "sky"     -> new SkyRealmGenerator();
+            case "forest"  -> new ForestLegendGenerator();
+            default        -> new AdvancedChunkGenerator();
         };
     }
 
