@@ -1,0 +1,45 @@
+name: AdvancedWorldGenerator
+version: 1.0.0
+main: com.advancedworldgen.AdvancedWorldGenerator
+api-version: '1.21'
+author: soyadrianyt001
+description: Generador de mundos epicos.
+
+commands:
+  awg:
+    description: Menu principal
+    usage: /awg
+    permission: awg.admin
+  awgcreate:
+    description: Crea un mundo epico
+    usage: /awgcreate <nombre|DuneWorld|InfernoWorld|FrozenRealm|SkyRealm|ForestLegend>
+    permission: awg.admin
+  awgdelete:
+    description: Borra un mundo
+    usage: /awgdelete <nombre>
+    permission: awg.admin
+  awgtp:
+    description: Teletransporte a estructuras
+    usage: /awgtp <estructura|mundo>
+    permission: awg.admin
+  awgconfig:
+    description: Configura el generador
+    usage: /awgconfig <opcion> <valor>
+    permission: awg.admin
+  awginfo:
+    description: Info del mundo actual
+    usage: /awginfo
+    permission: awg.admin
+  awglist:
+    description: Lista mundos epicos
+    usage: /awglist
+    permission: awg.admin
+  awgworlds:
+    description: Info de los 5 mundos epicos
+    usage: /awgworlds
+    permission: awg.admin
+
+permissions:
+  awg.admin:
+    description: Acceso completo
+    default: op
