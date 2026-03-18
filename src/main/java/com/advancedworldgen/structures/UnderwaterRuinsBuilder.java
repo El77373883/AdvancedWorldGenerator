@@ -14,7 +14,6 @@ public class UnderwaterRuinsBuilder {
         int x = chunk.getX() * 16 + 2;
         int z = chunk.getZ() * 16 + 2;
 
-        // Solo bajo el agua
         int surfY = world.getHighestBlockYAt(x + 7, z + 7);
         if (surfY > 58) return;
 
@@ -34,13 +33,13 @@ public class UnderwaterRuinsBuilder {
             for (int dz = 0; dz < 10; dz++)
                 setBlock(w, x + dx, y, z + dz, materials[rand.nextInt(materials.length)]);
 
-        // Columnas rotas
+        // Columnas — PRISMARINE_PILLAR reemplazado por PRISMARINE_BRICKS
         int[][] cols = {{0,0},{0,9},{9,0},{9,9},{4,4}};
         for (int[] col : cols) {
             int colH = 3 + rand.nextInt(5);
             boolean broken = rand.nextInt(2) == 0;
             for (int dy = 1; dy <= (broken ? colH - 1 : colH); dy++)
-                setBlock(w, x + col[0], y + dy, z + col[1], Material.PRISMARINE_PILLAR);
+                setBlock(w, x + col[0], y + dy, z + col[1], Material.PRISMARINE_BRICKS);
             if (!broken)
                 setBlock(w, x + col[0], y + colH + 1, z + col[1], Material.SEA_LANTERN);
         }
@@ -78,7 +77,6 @@ public class UnderwaterRuinsBuilder {
             }
         }
 
-        // Algas
         for (int i = 0; i < 10; i++) {
             int ax = x + rand.nextInt(12);
             int az = z + rand.nextInt(12);
@@ -92,7 +90,6 @@ public class UnderwaterRuinsBuilder {
     }
 
     private void buildSunkenShip(World w, int x, int y, int z, Random rand) {
-        // Barco hundido inclinado
         for (int dx = 0; dx < 8; dx++) {
             int shipY = y + (dx < 4 ? 0 : -1);
             setBlock(w, x + dx, shipY, z, Material.OAK_PLANKS);
@@ -104,11 +101,9 @@ public class UnderwaterRuinsBuilder {
             setBlock(w, x, y, z + dz, Material.OAK_PLANKS);
             setBlock(w, x + 7, y - 1, z + dz, Material.OAK_PLANKS);
         }
-        // Mastil roto
         for (int dy = 2; dy <= 5; dy++)
             setBlock(w, x + 3, y + dy, z + 1, Material.OAK_LOG);
 
-        // Cofre hundido
         setBlock(w, x + 4, y + 1, z + 1, Material.CHEST);
         Block b = w.getBlockAt(x + 4, y + 1, z + 1);
         if (b.getState() instanceof Chest chest) fillUnderwaterLoot(chest.getInventory(), rand);
