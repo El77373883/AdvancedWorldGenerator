@@ -23,19 +23,15 @@ public class JapaneseTempleBuilder {
     }
 
     private void buildGate(World w, int x, int y, int z, Random rand) {
-        // Torii gate
-        setBlock(w, x + 3, y + 1, z, Material.CRIMSON_LOG);
-        setBlock(w, x + 3, y + 2, z, Material.CRIMSON_LOG);
-        setBlock(w, x + 3, y + 3, z, Material.CRIMSON_LOG);
-        setBlock(w, x + 3, y + 4, z, Material.CRIMSON_LOG);
-        setBlock(w, x + 7, y + 1, z, Material.CRIMSON_LOG);
-        setBlock(w, x + 7, y + 2, z, Material.CRIMSON_LOG);
-        setBlock(w, x + 7, y + 3, z, Material.CRIMSON_LOG);
-        setBlock(w, x + 7, y + 4, z, Material.CRIMSON_LOG);
+        // Torii gate — CRIMSON_LOG reemplazado por DARK_OAK_LOG (color rojo oscuro)
+        for (int dy = 1; dy <= 4; dy++) {
+            setBlock(w, x + 3, y + dy, z, Material.DARK_OAK_LOG);
+            setBlock(w, x + 7, y + dy, z, Material.DARK_OAK_LOG);
+        }
         // Barra horizontal
         for (int dx = 2; dx <= 8; dx++) {
-            setBlock(w, x + dx, y + 4, z, Material.CRIMSON_LOG);
-            setBlock(w, x + dx, y + 5, z, Material.CRIMSON_SLAB);
+            setBlock(w, x + dx, y + 4, z, Material.DARK_OAK_LOG);
+            setBlock(w, x + dx, y + 5, z, Material.DARK_OAK_SLAB);
         }
         // Escaleras al templo
         for (int i = 0; i < 5; i++)
@@ -62,16 +58,16 @@ public class JapaneseTempleBuilder {
             }
         }
 
-        // Techo curvo estilo japonés
+        // Techo curvo estilo japones — CRIMSON_SLAB reemplazado por RED_NETHER_BRICK_SLAB
         for (int dy = 0; dy <= 3; dy++) {
             int offset = dy;
             for (int dx = -offset; dx < width + offset; dx++) {
-                setBlock(w, x + dx, y + height + dy + 1, z - offset, Material.CRIMSON_SLAB);
-                setBlock(w, x + dx, y + height + dy + 1, z + depth - 1 + offset, Material.CRIMSON_SLAB);
+                setBlock(w, x + dx, y + height + dy + 1, z - offset, Material.RED_NETHER_BRICK_SLAB);
+                setBlock(w, x + dx, y + height + dy + 1, z + depth - 1 + offset, Material.RED_NETHER_BRICK_SLAB);
             }
             for (int dz = -offset; dz < depth + offset; dz++) {
-                setBlock(w, x - offset, y + height + dy + 1, z + dz, Material.CRIMSON_SLAB);
-                setBlock(w, x + width - 1 + offset, y + height + dy + 1, z + dz, Material.CRIMSON_SLAB);
+                setBlock(w, x - offset, y + height + dy + 1, z + dz, Material.RED_NETHER_BRICK_SLAB);
+                setBlock(w, x + width - 1 + offset, y + height + dy + 1, z + dz, Material.RED_NETHER_BRICK_SLAB);
             }
         }
 
@@ -101,13 +97,14 @@ public class JapaneseTempleBuilder {
                 setBlock(w, x + dx, y + 1, z + 10 + dz, Material.WATER);
             }
 
-        // Árboles de cerezo en el jardín
+        // Troncos de cerezo en el jardin
         for (int i = 0; i < 3; i++) {
             int tx = x + rand.nextInt(8);
             int tz = z + 12 + rand.nextInt(4);
             int ty = w.getHighestBlockYAt(tx, tz);
             if (Math.abs(ty - y) < 3)
-                for (int dy = 0; dy < 10; dy++) setBlock(w, tx, ty + dy, tz, Material.CHERRY_LOG);
+                for (int dy = 0; dy < 10; dy++)
+                    setBlock(w, tx, ty + dy, tz, Material.CHERRY_LOG);
         }
 
         // Linterna de piedra
@@ -139,18 +136,17 @@ public class JapaneseTempleBuilder {
                 }
             }
 
-            // Techo del piso
+            // Techo con RED_NETHER_BRICK_SLAB
             int offset = 1;
             for (int dx = -offset; dx < size + offset; dx++) {
-                setBlock(w, x + dx, floorY + 4, z - offset, Material.CRIMSON_SLAB);
-                setBlock(w, x + dx, floorY + 4, z + size - 1 + offset, Material.CRIMSON_SLAB);
+                setBlock(w, x + dx, floorY + 4, z - offset, Material.RED_NETHER_BRICK_SLAB);
+                setBlock(w, x + dx, floorY + 4, z + size - 1 + offset, Material.RED_NETHER_BRICK_SLAB);
             }
             for (int dz = -offset; dz < size + offset; dz++) {
-                setBlock(w, x - offset, floorY + 4, z + dz, Material.CRIMSON_SLAB);
-                setBlock(w, x + size - 1 + offset, floorY + 4, z + dz, Material.CRIMSON_SLAB);
+                setBlock(w, x - offset, floorY + 4, z + dz, Material.RED_NETHER_BRICK_SLAB);
+                setBlock(w, x + size - 1 + offset, floorY + 4, z + dz, Material.RED_NETHER_BRICK_SLAB);
             }
 
-            // Linterna en cada piso
             setBlock(w, x + size / 2, floorY + 2, z + size / 2, Material.LANTERN);
         }
     }
