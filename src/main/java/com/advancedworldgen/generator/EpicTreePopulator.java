@@ -1,7 +1,6 @@
 package com.advancedworldgen.generator;
 
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.LimitedRegion;
 import org.bukkit.generator.WorldInfo;
@@ -22,9 +21,10 @@ public class EpicTreePopulator extends BlockPopulator {
             int y = getSurfaceY(region, x, z);
             if (y < 63 || y > 200) continue;
 
+            // Corregido: usar getType en vez de getBlockAt
             try {
-                Block ground = region.getBlockAt(x, y, z);
-                if (ground.getType() != Material.GRASS_BLOCK && ground.getType() != Material.DIRT) continue;
+                Material ground = region.getType(x, y, z);
+                if (ground != Material.GRASS_BLOCK && ground != Material.DIRT) continue;
             } catch (Exception ignored) { continue; }
 
             int type = random.nextInt(5);
