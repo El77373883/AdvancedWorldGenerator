@@ -1,0 +1,16 @@
+generator:
+  mountain-height: 120
+  tree-frequency: 4
+  cave-density: 0.08
+  structure-frequency: 100
+  volcano-chance: 5
+  dungeon-chance: 10
+  village-chance: 16
+  city-chance: 2
+
+worlds:
+  DuneWorld: dune
+  InfernoWorld: inferno
+  FrozenRealm: frozen
+  SkyRealm: sky
+  ForestLegend: forest
